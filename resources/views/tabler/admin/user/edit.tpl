@@ -18,7 +18,7 @@
                                        value="{$edit_user->email}">
                             </div>
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="user_name">昵称</label>
+                                <label class="floating-label" for="user_name">用户昵称</label>
                                 <input class="form-control maxwidth-edit" id="user_name" type="text"
                                        value="{$edit_user->user_name}">
                             </div>
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="money">余额</label>
+                                <label class="floating-label" for="money">金钱</label>
                                 <input class="form-control maxwidth-edit" id="money" type="text"
                                        value="{$edit_user->money}">
                             </div>
@@ -77,6 +77,38 @@
                         </div>
                     </div>
                 </div>
+
+				<div class="card">
+					<div class="card-main">
+						<div class="card-inner">
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="ban_time">手动封禁时长 (分钟)，不封禁不要修改</label>
+                                <input class="form-control maxwidth-edit" id="ban_time" type="text"
+                                       value="0">
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="last_detect_ban_time">最后一次被封禁的时间</label>
+                                <input class="form-control maxwidth-edit" id="last_detect_ban_time" type="text"
+                                       value="{$edit_user->lastDetectBanTime()}" readonly>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="relieve_time">当前解封时间</label>
+                                <input class="form-control maxwidth-edit" id="relieve_time" type="text"
+                                       value="{$edit_user->relieveTime()}" readonly>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="detect_ban_number">累计封禁次数</label>
+                                <input class="form-control maxwidth-edit" id="detect_ban_number" type="text"
+                                       value="{if $edit_user->detectBanNumber()==0}标杆用户，没有被封禁过耶{else}太坏了，这位用户累计被封禁过 {$edit_user->detectBanNumber()} 次呢{/if}" readonly>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="all_detect_number">累计违规次数</label>
+                                <input class="form-control maxwidth-edit" id="all_detect_number" type="text"
+                                       value="{$edit_user->all_detect_number}" readonly>
+                            </div>
+						</div>
+					</div>
+				</div>
                 <div class="card">
                     <div class="card-main">
                         <div class="card-inner">
@@ -138,6 +170,22 @@
                     <div class="card-main">
                         <div class="card-inner">
                             <div class="form-group form-group-label">
+                                <label class="floating-label" for="auto_reset_day">免费用户流量重置日</label>
+                                <input class="form-control maxwidth-edit" id="auto_reset_day" type="number"
+                                       value="{$edit_user->auto_reset_day}">
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="auto_reset_bandwidth">重置的免费流量(GB)</label>
+                                <input class="form-control maxwidth-edit" id="auto_reset_bandwidth" type="number"
+                                       value="{$edit_user->auto_reset_bandwidth}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-main">
+                        <div class="card-inner">
+                            <div class="form-group form-group-label">
                                 <label class="floating-label" for="invite_num">可用邀请数量</label>
                                 <input class="form-control maxwidth-edit" id="invite_num" type="number"
                                        value="{$edit_user->invite_num}">
@@ -160,7 +208,7 @@
                                 <p class="form-control-guide"><i class="material-icons">info</i>用户只能访问到组别等于这个数字或0的节点</p>
                             </div>
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="class">用户等级</label>
+                                <label class="floating-label" for="class">用户级别</label>
                                 <input class="form-control maxwidth-edit" id="class" type="number"
                                        value="{$edit_user->class}">
                                 <p class="form-control-guide"><i class="material-icons">info</i>用户只能访问到等级小于等于这个数字的节点</p>
@@ -184,13 +232,13 @@
                     <div class="card-main">
                         <div class="card-inner">
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="node_speedlimit">限制速率 (Mbps)</label>
+                                <label class="floating-label" for="node_speedlimit">用户限速，用户在每个节点所享受到的速度(Mbps)</label>
                                 <input class="form-control maxwidth-edit" id="node_speedlimit" type="text"
                                        value="{$edit_user->node_speedlimit}">
                                 <p class="form-control-guide"><i class="material-icons">info</i>0 为不限制</p>
                             </div>
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="node_connector">限制设备数</label>
+                                <label class="floating-label" for="node_connector">用户同时连接 IP 数</label>
                                 <input class="form-control maxwidth-edit" id="node_connector" type="text"
                                        value="{$edit_user->node_connector}">
                                 <p class="form-control-guide"><i class="material-icons">info</i>0 为不限制</p>
@@ -204,12 +252,12 @@
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="node_speedlimit">禁止用户访问的IP，一行一个</label>
                                 <textarea class="form-control maxwidth-edit" id="forbidden_ip"
-                                          rows="8">{$edit_user->get_forbidden_ip()}</textarea>
+                                          rows="8">{$edit_user->getForbiddenIp()}</textarea>
                             </div>
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="node_speedlimit">禁止用户访问的端口，一行一个</label>
                                 <textarea class="form-control maxwidth-edit" id="forbidden_port"
-                                          rows="8">{$edit_user->get_forbidden_port()}</textarea>
+                                          rows="8">{$edit_user->getForbiddenPort()}</textarea>
                             </div>
                         </div>
                     </div>
@@ -262,6 +310,8 @@
                 data: {
                     email: $$getValue('email'),
                     pass: $$getValue('pass'),
+                    auto_reset_day: $$getValue('auto_reset_day'),
+                    auto_reset_bandwidth: $$getValue('auto_reset_bandwidth'),
                     is_multi_user: $$getValue('is_multi_user'),
                     port: $$getValue('port'),
                     group: $$getValue('group'),
@@ -276,6 +326,7 @@
                     enable,
                     is_admin,
                     ga_enable,
+                    ban_time: $$getValue('ban_time'),
                     ref_by: $$getValue('ref_by'),
                     forbidden_ip: $$getValue('forbidden_ip'),
                     forbidden_port: $$getValue('forbidden_port'),

@@ -3,45 +3,36 @@
 <main class="content">
     <div class="content-header ui-content-header">
         <div class="container">
-            <h1 class="content-heading">配置编辑 #{$edit_config->id}</h1>
+            <h1 class="content-heading">添加充值码</h1>
         </div>
     </div>
     <div class="container">
-        <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-12 col-md-12">
             <section class="content-inner margin-top-no">
                 <div class="card">
                     <div class="card-main">
                         <div class="card-inner">
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="key">配置名</label>
-                                <input class="form-control maxwidth-edit" id="key" type="text" value="{$edit_config->key}" readonly>
+                                <label class="floating-label" for="amount">数目</label>
+                                <input class="form-control maxwidth-edit" id="amount" type="text" value="1">
                             </div>
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="name">配置名称</label>
-                                <input class="form-control maxwidth-edit" id="name" type="text" value="{$edit_config->name}" readonly>
+                                <label class="floating-label" for="face_value">面额</label>
+                                <input class="form-control maxwidth-edit" id="face_value" type="text">
                             </div>
-                        {if $edit_config->comment!=''}
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="comment">配置描述</label>
-                                <textarea class="form-control maxwidth-edit" id="comment" rows="4" readonly>{$edit_config->comment}</textarea>
-                            </div>
-                        {/if}
-                        {if strpos($edit_config->key,'.bool.') === false}
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="value">配置值</label>
-                                <textarea class="form-control maxwidth-edit" id="value" rows="5">{$edit_config->getValue()}</textarea>
-                            </div>
-                        {else}
-                            <div class="form-group form-group-label">
-                                <label for="value">
-                                    <label class="floating-label" for="value">配置开关</label>
-                                    <select id="value" class="form-control maxwidth-edit" name="value">
-                                        <option value="0" {if !$edit_config->getValue()}selected{/if}>关闭</option>
-                                        <option value="1" {if $edit_config->getValue()}selected{/if}>开启</option>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="code_length">充值码长度</label>
+                                    <select id="code_length" class="form-control maxwidth-edit" name="code_length">
+                                        <option value="12">12 位</option>    
+                                        <option value="18" selected>18 位</option>
+                                        <option value="24">24 位</option>
+                                        <option value="30">30 位</option>
+                                        <option value="36">36 位</option>
                                     </select>
-                                </label>
+                                </div>
                             </div>
-                        {/if}
+                            <p class="form-control-guide"><i class="material-icons">info</i>生成的充值码将会发送到你的邮箱中（需要提前设置好邮件发信参数，且测试发信能够成功）</p>
                         </div>
                     </div>
                 </div>
@@ -52,7 +43,7 @@
                                 <div class="row">
                                     <div class="col-md-10 col-md-push-1">
                                         <button id="submit" type="submit"
-                                                class="btn btn-block btn-brand waves-attach waves-light">修改
+                                            class="btn btn-block btn-brand waves-attach waves-light">添加
                                         </button>
                                     </div>
                                 </div>
@@ -72,20 +63,26 @@
     window.addEventListener('load', () => {
         function submit() {
             $.ajax({
-                type: "PUT",
-                url: "/admin/config/update/{$edit_config->key}",
+                type: "POST",
+                url: "/admin/code",
                 dataType: "json",
                 data: {
-                    value: $$getValue('value')
+                    amount: $$getValue('amount'),
+                    face_value: $$getValue('face_value'),
+                    code_length: $$getValue('code_length'),
                 },
                 success: data => {
                     if (data.ret) {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;
-                        window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
-                    } else {
+                        window.setTimeout("location.href=top.document.referrer", 1500);
+                    } else if (data.ret == 0) {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;
+                    } else {
+                        $("#msg-error").hide(10);
+                        $("#msg-error").show(100);
+                        $$.getElementById('msg').innerHTML = `${ldelim}data.msg{rdelim} 发生错误了。`;
                     }
                 },
                 error: jqXHR => {
@@ -97,7 +94,7 @@
             });
         }
         $("html").keydown(event => {
-            if (event.keyCode == 13) {
+            if (event.keyCode === 13) {
                 submit();
             }
         });

@@ -1,9 +1,8 @@
 {include file='admin/main.tpl'}
-
 <main class="content">
     <div class="content-header ui-content-header">
         <div class="container">
-            <h1 class="content-heading">最近登录记录</h1>
+            <h1 class="content-heading">#{$user->id} [{$user->user_name}] 用户登录记录</h1>
         </div>
     </div>
     <div class="container">
@@ -12,7 +11,6 @@
                 <div class="card">
                     <div class="card-main">
                         <div class="card-inner">
-                            <p>这里是最近的登录记录。</p>
                             <p>显示表项: {include file='table/checkbox.tpl'}</p>
                         </div>
                     </div>

@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="server">节点地址</label>
-                                    <textarea class="form-control maxwidth-edit" rows="3" id="server" type="text" name="server"></textarea>
+                                    <input class="form-control maxwidth-edit" id="server" type="text" name="server">
                                     <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP</p>
                                 </div>
                                 <div class="form-group form-group-label">
@@ -67,15 +67,10 @@
                                            value="可用">
                                 </div>
                                 <div class="form-group form-group-label">
-                                    <label class="floating-label" for="remark">节点备注（仅管理员可见）</label>
-                                    <input class="form-control maxwidth-edit" id="remark" type="text" name="remark">
-                                </div>
-                                <div class="form-group form-group-label">
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="sort">节点类型</label>
                                         <select id="sort" class="form-control maxwidth-edit" name="sort">
                                             <option value="0">Shadowsocks</option>
-                                            <option value="1">Shadowsocksr</option>
                                             <option value="9">Shadowsocksr 单端口多用户（旧）</option>
                                             <option value="11">V2Ray</option>
                                             <option value="14">Trojan</option>
@@ -157,7 +152,6 @@
             info: {required: true},
             group: {required: true},
             status: {required: true},
-            remark: {required: true},
             node_speedlimit: {required: true},
             sort: {required: true},
             node_bandwidth_limit: {required: true},
@@ -184,7 +178,6 @@
                     type,
                     group: $$getValue('group'),
                     status: $$getValue('status'),
-                    remark: $$getValue('remark'),
                     node_speedlimit: $$getValue('node_speedlimit'),
                     sort: $$getValue('sort'),
                     class: $$getValue('class'),

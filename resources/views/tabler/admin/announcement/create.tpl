@@ -15,7 +15,7 @@
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="content">内容</label>
                                 <link rel="stylesheet"
-                                    href="/theme/material/editormd/editormd.min.css" />
+                                      href="https://fastly.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css"/>
                                 <div id="editormd">
                                     <textarea style="display:none;" id="content"></textarea>
                                 </div>
@@ -29,8 +29,20 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-10 col-md-push-1">
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="vip">VIP等级</label>
+                                            <input class="form-control maxwidth-edit" id="vip" type="text" name="vip">
+                                            <p class="form-control-guide"><i class="material-icons">info</i>发送给等于或高于这个等级的用户
+                                                0为不分级</p>
+                                            <div class="checkbox switch">
+                                                <label for="issend">
+                                                    <input class="access-hide" id="issend" type="checkbox"
+                                                           name="issend"><span class="switch-toggle"></span>是否发送邮件
+                                                </label>
+                                            </div>
+                                        </div>
                                         <button id="submit" type="submit"
-                                            class="btn btn-block btn-brand waves-attach waves-light">添加
+                                                class="btn btn-block btn-brand waves-attach waves-light">添加
                                         </button>
                                     </div>
                                 </div>
@@ -46,11 +58,11 @@
 
 {include file='admin/footer.tpl'}
 
-<script src="/theme/material/editormd/editormd.min.js"></script>
+<script src="https://cdn.staticfile.org/editor-md/1.5.0/editormd.min.js"></script>
 <script>
     (() => {
         editor = editormd("editormd", {
-            path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+            path: "https://fastly.jsdelivr.net/npm/editor.md@1.5.0/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
             height: 720,
             saveHTMLToTextarea: true
         });
@@ -63,14 +75,27 @@
         */
     })();
     window.addEventListener('load', () => {
-        function submit() {
+        function submit(page = -1) {
+            if ($$.getElementById('issend').checked) {
+                var issend = 1;
+            } else {
+                var issend = 0;
+            }
+            if (page === -1) {
+                sedPage = 1;
+            } else {
+                sedPage = page;
+            }
             $.ajax({
                 type: "POST",
                 url: "/admin/announcement",
                 dataType: "json",
                 data: {
                     content: editor.getHTML(),
-                    markdown: $('.editormd-markdown-textarea').val()
+                    markdown: $('.editormd-markdown-textarea').val(),
+                    vip: $$getValue('vip'),
+                    issend,
+                    page: sedPage
                 },
                 success: data => {
                     if (data.ret === 1) {

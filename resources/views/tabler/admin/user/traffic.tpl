@@ -3,7 +3,7 @@
 <main class="content">
     <div class="content-header ui-content-header">
         <div class="container">
-            <h1 class="content-heading">Telegram 配置</h1>
+            <h1 class="content-heading">#{$user->id} [{$user->user_name}] 用户流量记录</h1>
         </div>
     </div>
     <div class="container">
@@ -19,7 +19,6 @@
                 <div class="table-responsive">
                     {include file='table/table.tpl'}
                 </div>
-            </section>
         </div>
     </div>
 </main>

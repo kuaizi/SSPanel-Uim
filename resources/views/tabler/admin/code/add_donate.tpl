@@ -3,7 +3,7 @@
 <main class="content">
     <div class="content-header ui-content-header">
         <div class="container">
-            <h1 class="content-heading">编辑公告 #{$ann->id}</h1>
+            <h1 class="content-heading">添加捐赠或支出记录</h1>
         </div>
     </div>
     <div class="container">
@@ -13,12 +13,19 @@
                     <div class="card-main">
                         <div class="card-inner">
                             <div class="form-group form-group-label">
-                                <label class="floating-label" for="content">内容</label>
-                                <link rel="stylesheet"
-                                      href="https://fastly.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css"/>
-                                <div id="editormd">
-                                    <textarea style="display:none;" id="content">{$ann->markdown}</textarea>
-                                </div>
+                                <label class="floating-label" for="number">类型</label>
+                                <select id="type" class="form-control maxwidth-edit" name="type">
+                                    <option value="-1">捐赠</option>
+                                    <option value="-2">支出</option>
+                                </select>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="number">备注</label>
+                                <input class="form-control maxwidth-edit" id="code" type="text">
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="amount">金额</label>
+                                <input class="form-control maxwidth-edit" id="amount" type="text">
                             </div>
                         </div>
                     </div>
@@ -30,7 +37,7 @@
                                 <div class="row">
                                     <div class="col-md-10 col-md-push-1">
                                         <button id="submit" type="submit"
-                                                class="btn btn-block btn-brand waves-attach waves-light">修改
+                                                class="btn btn-block btn-brand waves-attach waves-light">添加
                                         </button>
                                     </div>
                                 </div>
@@ -46,32 +53,17 @@
 
 {include file='admin/footer.tpl'}
 
-<script src="https://cdn.staticfile.org/editor-md/1.5.0/editormd.min.js"></script>
 <script>
-    (() => {
-        editor = editormd("editormd", {
-            path: "https://fastly.jsdelivr.net/npm/editor.md@1.5.0/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
-            height: 720,
-            saveHTMLToTextarea: true,
-            emoji: true
-        });
-        /*
-        // or
-        var editor = editormd({
-            id   : "editormd",
-            path : "../lib/"
-        });
-        */
-    })();
     window.addEventListener('load', () => {
-        function submit() {
+        let submit = () => {
             $.ajax({
-                type: "PUT",
-                url: "/admin/announcement/{$ann->id}",
+                type: "POST",
+                url: "/admin/donate",
                 dataType: "json",
                 data: {
-                    content: editor.getHTML(),
-                    markdown: editor.getMarkdown()
+                    amount: $$getValue("amount"),
+                    code: $$getValue("code"),
+                    type: $$getValue("type")
                 },
                 success: data => {
                     if (data.ret) {
@@ -79,8 +71,9 @@
                         $$.getElementById('msg').innerHTML = data.msg;
                         window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
                     } else {
-                        $("#result").modal();
-                        document.getElementById('msg').innerHTML = data.msg;
+                        $("#msg-error").hide(10);
+                        $("#msg-error").show(100);
+                        $$.getElementById('msg-error-p').innerHTML = data.msg;
                     }
                 },
                 error: jqXHR => {
@@ -91,6 +84,11 @@
                 }
             });
         }
+        $("html").keydown(event => {
+            if (event.keyCode === 13) {
+                login();
+            }
+        });
         $$.getElementById('submit').addEventListener('click', submit);
-    });
+    })
 </script>

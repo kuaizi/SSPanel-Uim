@@ -20,7 +20,8 @@
                                 </div>
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="server">节点地址</label>
-                                    <textarea class="form-control maxwidth-edit" id="server" name="server" rows="3" type="text">{$node->server}</textarea>
+                                    <input class="form-control maxwidth-edit" id="server" name="server" type="text"
+                                           value="{$node->server}">
                                     <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP</p>
                                 </div>
                                 <div class="form-group form-group-label">
@@ -69,16 +70,10 @@
                                            value="{$node->status}">
                                 </div>
                                 <div class="form-group form-group-label">
-                                    <label class="floating-label" for="remark">节点备注（仅管理员可见）</label>
-                                    <input class="form-control maxwidth-edit" id="remark" type="text" name="remark"
-                                            value="{$node->remark}">
-                                </div>
-                                <div class="form-group form-group-label">
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="sort">节点类型</label>
                                         <select id="sort" class="form-control maxwidth-edit" name="sort">
                                             <option value="0" {if $node->sort==0}selected{/if}>Shadowsocks</option>
-                                            <option value="1" {if $node->sort==1}selected{/if}>Shadowsocksr</option>
                                             <option value="9" {if $node->sort==9}selected{/if}>Shadowsocksr 单端口多用户（旧）</option>
                                             <option value="11" {if $node->sort==11}selected{/if}>V2Ray</option>
                                             <option value="14" {if $node->sort==14}selected{/if}>Trojan</option>
@@ -101,12 +96,6 @@
                                     <input class="form-control maxwidth-edit" id="group" name="group" type="text"
                                            value="{$node->node_group}">
                                     <p class="form-control-guide"><i class="material-icons">info</i>分组为数字，不分组请填0</p>
-                                </div>
-                                <div class="form-group form-group-label">
-                                    <label class="floating-label" for="node_bandwidth">节点已用流量（GB）</label>
-                                    <input class="form-control maxwidth-edit" id="node_bandwidth"
-                                           name="node_bandwidth" type="text"
-                                           value="{round($node->node_bandwidth /1024/1024/1024, 2)}">
                                 </div>
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="node_bandwidth_limit">节点流量上限（GB）</label>
@@ -170,10 +159,8 @@
             info: {required: true},
             group: {required: true},
             status: {required: true},
-            remark: {required: true},
             node_speedlimit: {required: true},
             sort: {required: true},
-            node_bandwidth: {required: true},
             node_bandwidth_limit: {required: true},
             bandwidthlimit_resetday: {required: true}
         },
@@ -199,11 +186,9 @@
                     type,
                     group: $$getValue('group'),
                     status: $$getValue('status'),
-                    remark: $$getValue('remark'),
                     sort: $$getValue('sort'),
                     node_speedlimit: $$getValue('node_speedlimit'),
                     class: $$getValue('class'),
-                    node_bandwidth: $$getValue('node_bandwidth'),
                     node_bandwidth_limit: $$getValue('node_bandwidth_limit'),
                     bandwidthlimit_resetday: $$getValue('bandwidthlimit_resetday')
 {/literal},
