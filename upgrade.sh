@@ -8,8 +8,8 @@ do_upgrade_sspanel(){
     git pull
     php composer.phar u
     php vendor/bin/phinx migrate
-    php xcat Update
     php xcat Tool importAllSettings
+    php xcat Update
 }
 
 do_upgrade_sspanel
