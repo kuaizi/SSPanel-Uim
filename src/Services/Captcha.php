@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Setting;
-use App\Utils\Geetest;
+use App\Utils\GeetestSDK;
 
 final class Captcha
 {
@@ -19,7 +19,7 @@ final class Captcha
                 $recaptcha = Setting::obtain('recaptcha_sitekey');
                 break;
             case 'geetest':
-                $geetest = Geetest::get(time() . random_int(1, 10000));
+                $geetest = GeetestSDK::get(time() . random_int(1, 10000));
                 break;
         }
 
@@ -47,7 +47,7 @@ final class Captcha
                 break;
             case 'geetest':
                 if (isset($param['geetest_challenge']) && isset($param['geetest_validate']) && isset($param['geetest_seccode'])) {
-                    $result = Geetest::verify($param['geetest_challenge'], $param['geetest_validate'], $param['geetest_seccode']);
+                    $result = GeetestSDK::verify($param['geetest_challenge'], $param['geetest_validate'], $param['geetest_seccode']);
                 }
                 break;
         }

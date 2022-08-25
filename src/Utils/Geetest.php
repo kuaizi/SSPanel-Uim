@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use App\Models\Setting;
+use Onliner\GeeTest;
 
-/**
- * 极验行为式验证安全平台，php 网站主后台包含的库文件
- *
- * @author Tanxu
- */
-final class Geetest
+final class GeetestSDK
 {
     public static function get($user_id = null)
     {
         $configs = Setting::getClass('geetest');
-        $GtSdk = new GeetestLib($configs['geetest_id'], $configs['geetest_key']);
+        $GtSdk = new GeeTest($configs['geetest_id'], $configs['geetest_key']);
         $status = $GtSdk->preProcess($user_id);
         $ret = json_decode($GtSdk->getResponseStr());
         session_start();
@@ -29,7 +25,7 @@ final class Geetest
     {
         session_start();
         $configs = Setting::getClass('geetest');
-        $GtSdk = new GeetestLib($configs['geetest_id'], $configs['geetest_key']);
+        $GtSdk = new GeeTest($configs['geetest_id'], $configs['geetest_key']);
         $user_id = $_SESSION['user_id'];
         if ($_SESSION['gtserver'] === 1) {
             $result = $GtSdk->successValidate($geetest_challenge, $geetest_validate, $geetest_seccode, $user_id);

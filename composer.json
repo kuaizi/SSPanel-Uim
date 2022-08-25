@@ -30,7 +30,8 @@
         "voku/anti-xss": "^4",
         "zeuxisoo/slim-whoops": "0.5.*",
         "guzzlehttp/guzzle": "^7.4",
-        "symfony/console": "*"
+        "symfony/console": "*",
+        "sspanel-uim/geetest-php-sdk": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +40,10 @@
     },
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "require-dev": {
         "nunomaduro/phpinsights": "^2.2"

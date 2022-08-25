@@ -52,6 +52,5 @@ return [
         'src/Services/Mail.php',
         'src/Services/Password.php',
         'src/Utils/GA.php',
-        'src/Utils/GeetestLib.php',
     ],
 ];
